@@ -6,11 +6,13 @@ import ngohoanglong.com.lifequests.R;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BlueHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GreenHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.RedHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.AddHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BaseViewHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BlueHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.GreenHolder;
+import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.HorizontalListHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.RedHolder;
 
 
@@ -24,7 +26,7 @@ public class HolderFactoryImpl implements HolderFactory {
     private static final int ITEM_RED = R.layout.layout_red_item;
     private static final int ITEM_GREEN = R.layout.layout_green_item;
     private static final int ITEM_ADD = R.layout.layout_add_item;
-
+    private static final int ITEM_HL = R.layout.layout_hl_item;
 
     @Override
     public BaseViewHolder createHolder(int type, View view) {
@@ -37,6 +39,8 @@ public class HolderFactoryImpl implements HolderFactory {
                 return new RedHolder(view);
             case ITEM_ADD:
                 return new AddHolder(view);
+            case ITEM_HL:
+                return new HorizontalListHolder(view);
         }
         return null;
     }
@@ -59,5 +63,10 @@ public class HolderFactoryImpl implements HolderFactory {
     @Override
     public int getHolderType(AddHM addHM) {
         return ITEM_ADD;
+    }
+
+    @Override
+    public int getHolderType(HorizontalListHM horizontalListHM) {
+        return ITEM_HL;
     }
 }

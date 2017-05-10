@@ -18,6 +18,7 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BaseHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BlueHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GreenHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.RedHM;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         List<BaseHM> baseHMs = new Mapper().mapping(Service.getList());
+        baseHMs.add(new HorizontalListHM(baseHMs));
         rv.setAdapter(new CustomGodAdapter(baseHMs, new HolderFactoryImpl(),
                 new GodAdapter.OnClickEvent() {
                     @Override

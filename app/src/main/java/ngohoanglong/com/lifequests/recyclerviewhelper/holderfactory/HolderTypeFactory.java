@@ -4,6 +4,7 @@ package ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BlueHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GreenHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.RedHM;
 
 /**
@@ -17,4 +18,6 @@ public interface HolderTypeFactory {
     int getHolderType(RedHM redHM);
 
     int getHolderType(AddHM addHM);
+
+    int getHolderType(HorizontalListHM horizontalListHM);
 }
