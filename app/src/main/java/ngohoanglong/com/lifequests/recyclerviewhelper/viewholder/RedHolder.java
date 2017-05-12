@@ -15,16 +15,17 @@ public class RedHolder extends BaseViewHolder<RedHM> {
 
     public RedHolder(View itemView) {
         super(itemView); textView = (TextView) itemView.findViewById(R.id.tvPos);
+        if(itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams){
+            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
+            layoutParams.setFullSpan(true);
+        }
     }
     TextView textView;
 
     @Override
     public void bind(RedHM item) {
         textView.setText(""+item.pos);
-        if(itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams){
-            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
-            layoutParams.setFullSpan(true);
-        }
+
     }
 
 

@@ -1,5 +1,6 @@
 package ngohoanglong.com.lifequests.recyclerviewhelper.viewholder;
 
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
@@ -11,6 +12,10 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
 public class AddHolder extends BaseViewHolder<AddHM> {
     public AddHolder(View view) {
         super(view);
+        if(itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams){
+            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
+            layoutParams.setFullSpan(true);
+        }
     }
 
     @Override

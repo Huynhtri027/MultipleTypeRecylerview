@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactory;
@@ -17,7 +18,7 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BaseViewHolder;
 
 public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
 
-    List<BaseHM> baseHMs;
+    List<BaseHM> baseHMs = new ArrayList<>();
     protected HolderFactory holderFactory ;
     protected OnClickEvent onClickEvent;
 
@@ -26,7 +27,10 @@ public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
         this.holderFactory = holderFactory;
         this.onClickEvent = onClickEvent;
     }
-
+    public GodAdapter(HolderFactory holderFactory, OnClickEvent onClickEvent) {
+        this.holderFactory = holderFactory;
+        this.onClickEvent = onClickEvent;
+    }
     @Override
     public BaseViewHolder<BaseHM> onCreateViewHolder(ViewGroup parent, int viewType) {
         if (parent != null) {
@@ -55,6 +59,10 @@ public void addItem(BaseHM item){
     baseHMs.add(item);
     notifyDataSetChanged();
 }
+    public void addList(List<BaseHM> items){
+        baseHMs.addAll(items);
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         return baseHMs.size();

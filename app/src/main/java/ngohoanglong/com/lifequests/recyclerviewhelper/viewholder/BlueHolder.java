@@ -11,7 +11,6 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BlueHM;
  */
 
 public class BlueHolder extends BaseViewHolder<BlueHM> {
-
     public BlueHolder(View itemView) {
         super(itemView);
         textView = (TextView) itemView.findViewById(R.id.tvPos);

@@ -20,6 +20,6 @@ public class Service {
         return  simpleItems;
     }
     public static SimpleItem getItem(){
-        return  new SimpleItem(++count);
+        return  new SimpleItem(count++);
     }
 }

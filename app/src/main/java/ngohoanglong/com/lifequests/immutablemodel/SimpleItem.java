@@ -10,7 +10,7 @@ public class SimpleItem {
         this.text = text;
     }
 
-    public int getText() {
+    public int getPos() {
         return text;
     }
 }

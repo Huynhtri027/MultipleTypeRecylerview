@@ -7,4 +7,5 @@ import java.io.Serializable;
  */
 
 public abstract class BaseHM implements Serializable, Visitable {
+
 }

@@ -8,10 +8,8 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderTypeFa
 
 public class AddHM extends BaseHM {
 
-    public int pos;
 
-    public AddHM(int pos) {
-        this.pos = pos;
+    public AddHM() {
     }
 
     @Override
