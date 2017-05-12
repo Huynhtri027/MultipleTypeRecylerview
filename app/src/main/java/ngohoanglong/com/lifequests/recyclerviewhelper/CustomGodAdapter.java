@@ -5,7 +5,6 @@ import android.view.View;
 import java.util.Collections;
 import java.util.List;
 
-import ngohoanglong.com.lifequests.recyclerviewhelper.helper.ItemTouchHelperAdapter;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactory;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BaseHM;
@@ -15,7 +14,7 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BaseViewHolder;
  * Created by Long on 5/10/2017.
  */
 
-public class CustomGodAdapter extends GodAdapter implements ItemTouchHelperAdapter {
+public class CustomGodAdapter extends GodAdapter  {
     private static final String TAG = CustomGodAdapter.class.getSimpleName();
 
     public CustomGodAdapter(List<BaseHM> baseHMs, HolderFactory holderFactory, GodAdapter.OnClickEvent onClickEvent) {
@@ -64,13 +63,11 @@ public class CustomGodAdapter extends GodAdapter implements ItemTouchHelperAdapt
 
     }
 
-    @Override
     public void onItemDismiss(int position) {
         baseHMs.remove(position);
         notifyItemRemoved(position);
     }
 
-    @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(baseHMs, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);

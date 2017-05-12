@@ -15,7 +15,6 @@ import java.util.List;
 import ngohoanglong.com.lifequests.immutablemodel.SimpleItem;
 import ngohoanglong.com.lifequests.recyclerviewhelper.CustomGodAdapter;
 import ngohoanglong.com.lifequests.recyclerviewhelper.GodAdapter;
-import ngohoanglong.com.lifequests.recyclerviewhelper.helper.SimpleItemTouchHelperCallback;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactoryImpl;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BaseHM;
@@ -51,8 +50,7 @@ public class MainActivity extends AppCompatActivity  {
                         }
                     }
                 });
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(customGodAdapter);
-//        mItemTouchHelper = new ItemTouchHelper(callback);
+
         mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
 
             @Override
