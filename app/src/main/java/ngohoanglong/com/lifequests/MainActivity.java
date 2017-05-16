@@ -1,5 +1,6 @@
 package ngohoanglong.com.lifequests;
 
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity  {
                     }
                 });
 
+//       using to drag and swipe item
         mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
 
             @Override
@@ -71,6 +74,28 @@ public class MainActivity extends AppCompatActivity  {
             }
 
             @Override
+            public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                super.onSelectedChanged(viewHolder, actionState);
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+//                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE||actionState == ItemTouchHelper.ACTION_STATE_DRAG){
+//                    viewHolder.itemView.setAlpha(0.7f);
+//                }
+            }
+
+            @Override
+            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                Log.d("clearView", "clearView: ");
+                viewHolder.itemView.setAlpha(1);
+                super.clearView(recyclerView, viewHolder);
+
+
+            }
+
+            @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 if(viewHolder instanceof AddHolder){
                     return false;
@@ -85,14 +110,17 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
         mItemTouchHelper.attachToRecyclerView(rv);
+
         rv.setAdapter(customGodAdapter);
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+//        call services here
         List<BaseHM> baseHMs = mp.mapping(Service.getList());
         final List<BaseHM> copyList = new ArrayList<>(baseHMs);
+        baseHMs.add(new HorizontalListHM(copyList));
         baseHMs.add(new HorizontalListHM(copyList));
         customGodAdapter.addList(baseHMs);
     }
@@ -107,6 +135,7 @@ public class MainActivity extends AppCompatActivity  {
         }
         BaseHM mapping(SimpleItem simpleItem){
             BaseHM baseHM=null;
+//
             switch (simpleItem.getPos()%3){
                 case 0:
                     baseHM = new BlueHM(simpleItem.getPos());

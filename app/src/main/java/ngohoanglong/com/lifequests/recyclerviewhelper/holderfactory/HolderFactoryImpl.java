@@ -28,6 +28,10 @@ public class HolderFactoryImpl implements HolderFactory {
     private static final int ITEM_ADD = R.layout.layout_add_item;
     private static final int ITEM_HL = R.layout.layout_hl_item;
 
+    public static int getHLType() {
+        return ITEM_HL;
+    }
+
     @Override
     public BaseViewHolder createHolder(int type, View view) {
         switch(type) {

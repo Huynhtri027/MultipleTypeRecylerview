@@ -12,6 +12,9 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderTypeFa
 public class HorizontalListHM extends BaseHM {
     List<BaseHM> baseHMs = new ArrayList<>();
 
+//   de giu trang thai cua recyclerView
+    int currentPosition = 0;
+
     public HorizontalListHM(List<BaseHM> baseHMs) {
         this.baseHMs = baseHMs;
     }
@@ -22,6 +25,14 @@ public class HorizontalListHM extends BaseHM {
 
     public void setBaseHMs(List<BaseHM> baseHMs) {
         this.baseHMs = baseHMs;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public void setCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
     }
 
     @Override

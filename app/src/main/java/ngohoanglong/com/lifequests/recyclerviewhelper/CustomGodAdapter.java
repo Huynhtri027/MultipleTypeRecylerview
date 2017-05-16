@@ -64,13 +64,27 @@ public class CustomGodAdapter extends GodAdapter  {
     }
 
     public void onItemDismiss(int position) {
-        baseHMs.remove(position);
-        notifyItemRemoved(position);
+        if(avaiablePosition(position)){
+            baseHMs.remove(position);
+            notifyItemRemoved(position);
+        }
+
+
+    }
+    public boolean avaiablePosition(int position){
+        return position < getListSize();
+    }
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if(avaiablePosition(toPosition)){
+            Collections.swap(baseHMs, fromPosition, toPosition);
+            notifyItemMoved(fromPosition, toPosition);
+            return true;
+        }
+        return false;
     }
 
-    public boolean onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(baseHMs, fromPosition, toPosition);
-        notifyItemMoved(fromPosition, toPosition);
-        return true;
+    @Override
+    public void onViewRecycled(BaseViewHolder<BaseHM> holder) {
+        super.onViewRecycled(holder);
     }
 }
