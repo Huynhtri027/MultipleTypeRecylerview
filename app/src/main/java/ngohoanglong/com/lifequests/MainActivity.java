@@ -10,6 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +32,8 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.AddHolder;
 
 public class MainActivity extends AppCompatActivity  {
     RecyclerView rv;
+    Toolbar toolbar;
+    View wrapper;
     private ItemTouchHelper mItemTouchHelper;
     CustomGodAdapter customGodAdapter;
     Mapper mp = new Mapper();
@@ -35,6 +41,17 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        setup wrapView
+        wrapper = findViewById(R.id.wrapper);
+        wrapper.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
+//        setupActionBar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setActionBar(toolbar);
+        animateToolbar(toolbar);
+
+//        setup RV
         rv = (RecyclerView) findViewById(R.id.rv);
         final StaggeredGridLayoutManager staggeredGridLayoutManagerVertical =
                 new StaggeredGridLayoutManager(
@@ -110,7 +127,6 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
         mItemTouchHelper.attachToRecyclerView(rv);
-
         rv.setAdapter(customGodAdapter);
     }
 
@@ -123,6 +139,23 @@ public class MainActivity extends AppCompatActivity  {
         baseHMs.add(new HorizontalListHM(copyList));
         baseHMs.add(new HorizontalListHM(copyList));
         customGodAdapter.addList(baseHMs);
+    }
+
+    private void animateToolbar(Toolbar toolbar) {
+        View t = toolbar.getChildAt(0);
+        if (t != null && t instanceof TextView) {
+            TextView title = (TextView) t;
+            // fade in and space out the title.  Animating the letterSpacing performs horribly so
+            // fake it by setting the desired letterSpacing then animating the scaleX ¯\_(ツ)_/¯
+            title.setAlpha(0f);
+            title.setScaleX(0.6f);
+            title.animate()
+                    .alpha(1f)
+                    .scaleX(1f)
+                    .setStartDelay(300)
+                    .setDuration(500)
+                    .setInterpolator(new AccelerateInterpolator());
+        }
     }
 
     class Mapper{
