@@ -21,8 +21,9 @@ public class GreenHM extends BaseHM {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("GreenHM{ \n");
-        sb.append("pos=").append(pos);
+        final StringBuilder sb = new StringBuilder("GreenHM{ ");
+        sb.append("pos=").append(pos)
+                .append('\n');
         sb.append("}\n");
         return sb.toString();
     }

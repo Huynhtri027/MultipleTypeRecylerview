@@ -1,5 +1,6 @@
 package ngohoanglong.com.lifequests.recyclerviewhelper;
 
+import android.util.Log;
 import android.view.View;
 
 import java.util.List;
@@ -78,6 +79,7 @@ public class CustomGodAdapter extends GodAdapter  {
 //            Collections.swap(baseHMs, fromPosition, toPosition);
 //            why it not work
             baseHMs.set(fromPosition, baseHMs.set(toPosition, baseHMs.get(fromPosition)));
+            Log.d(TAG, "onItemMove: "+baseHMs);
             notifyItemMoved(fromPosition, toPosition);
             return true;
         }

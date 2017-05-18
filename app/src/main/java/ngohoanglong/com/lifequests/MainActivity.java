@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity  {
     RecyclerView rv;
     Toolbar toolbar;
     View wrapper;
+    List<BaseHM> baseHMs = new ArrayList<>();
     CustomGodAdapter customGodAdapter;
     Mapper mp = new Mapper();
     @Override
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity  {
                         LinearLayoutManager.VERTICAL);
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         rv.setLayoutManager(staggeredGridLayoutManagerVertical);
-        customGodAdapter = new CustomGodAdapter(new HolderFactoryImpl(),
+        customGodAdapter = new CustomGodAdapter(baseHMs,new HolderFactoryImpl(),
                 new GodAdapter.OnClickEvent() {
                     @Override
                     public void onItemClick( BaseHM baseHM) {
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity  {
         return super.getLastCustomNonConfigurationInstance();
     }
 
-    List<BaseHM> baseHMs = new ArrayList<>();
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

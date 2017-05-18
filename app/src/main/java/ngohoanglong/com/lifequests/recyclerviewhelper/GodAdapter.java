@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactory;
@@ -18,7 +17,7 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BaseViewHolder;
 
 public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
 
-    List<BaseHM> baseHMs = new ArrayList<>();
+    List<BaseHM> baseHMs ;
     HolderFactory holderFactory ;
     OnClickEvent onClickEvent;
 

@@ -9,7 +9,6 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderTypeFa
 public class RedHM extends BaseHM {
 
     public int pos;
-
     public RedHM(int pos) {
         this.pos = pos;
     }
@@ -21,9 +20,13 @@ public class RedHM extends BaseHM {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("RedHM{ \n");
+        final StringBuilder sb = new StringBuilder("RedHM{ ");
         sb.append("pos=").append(pos);
         sb.append("}\n");
         return sb.toString();
     }
+
+    public RedHM() {
+    }
+
 }
