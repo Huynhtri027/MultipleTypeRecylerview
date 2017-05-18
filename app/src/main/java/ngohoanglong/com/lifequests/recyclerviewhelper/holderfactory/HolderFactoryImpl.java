@@ -73,4 +73,5 @@ public class HolderFactoryImpl implements HolderFactory {
     public int getHolderType(HorizontalListHM horizontalListHM) {
         return ITEM_HL;
     }
+
 }

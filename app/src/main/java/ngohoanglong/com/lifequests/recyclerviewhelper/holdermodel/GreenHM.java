@@ -18,4 +18,12 @@ public class GreenHM extends BaseHM {
     public int getHolderType(HolderTypeFactory vmTypeFactory) {
         return vmTypeFactory.getHolderType(this);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("GreenHM{ \n");
+        sb.append("pos=").append(pos);
+        sb.append("}\n");
+        return sb.toString();
+    }
 }

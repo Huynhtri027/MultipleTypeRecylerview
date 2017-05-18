@@ -2,7 +2,6 @@ package ngohoanglong.com.lifequests.recyclerviewhelper;
 
 import android.view.View;
 
-import java.util.Collections;
 import java.util.List;
 
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactory;
@@ -23,7 +22,7 @@ public class CustomGodAdapter extends GodAdapter  {
     public CustomGodAdapter(HolderFactory holderFactory, GodAdapter.OnClickEvent onClickEvent) {
         super(holderFactory,onClickEvent);
     }
-    AddHM addHM = new AddHM();
+    private AddHM addHM = new AddHM();
     @Override
     public int getItemCount() {
         if(addHM!=null){
@@ -31,21 +30,21 @@ public class CustomGodAdapter extends GodAdapter  {
         }
         return baseHMs.size();
     }
-    int getListSize(){
+    private int getListSize(){
         return baseHMs.size();
     }
-    int getAddPosition(){
+    private int getAddPosition(){
         return baseHMs.size();
     }
 
     @Override
-    public void onBindViewHolder(final BaseViewHolder<BaseHM> holder, final int position) {
+    public void onBindViewHolder(final BaseViewHolder<BaseHM> holder,  int position) {
 
         if(position==getAddPosition()){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onClickEvent.onItemClick(position, addHM);
+                    onClickEvent.onItemClick(addHM);
                 }
             });
         }else{
@@ -71,12 +70,14 @@ public class CustomGodAdapter extends GodAdapter  {
 
 
     }
-    public boolean avaiablePosition(int position){
+    private boolean avaiablePosition(int position){
         return position < getListSize();
     }
     public boolean onItemMove(int fromPosition, int toPosition) {
         if(avaiablePosition(toPosition)){
-            Collections.swap(baseHMs, fromPosition, toPosition);
+//            Collections.swap(baseHMs, fromPosition, toPosition);
+//            why it not work
+            baseHMs.set(fromPosition, baseHMs.set(toPosition, baseHMs.get(fromPosition)));
             notifyItemMoved(fromPosition, toPosition);
             return true;
         }

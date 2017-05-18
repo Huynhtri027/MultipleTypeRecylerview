@@ -19,15 +19,15 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BaseViewHolder;
 public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
 
     List<BaseHM> baseHMs = new ArrayList<>();
-    protected HolderFactory holderFactory ;
-    protected OnClickEvent onClickEvent;
+    HolderFactory holderFactory ;
+    OnClickEvent onClickEvent;
 
     public GodAdapter(List<BaseHM> baseHMs, HolderFactory holderFactory, OnClickEvent onClickEvent) {
         this.baseHMs = baseHMs;
         this.holderFactory = holderFactory;
         this.onClickEvent = onClickEvent;
     }
-    public GodAdapter(HolderFactory holderFactory, OnClickEvent onClickEvent) {
+    GodAdapter(HolderFactory holderFactory, OnClickEvent onClickEvent) {
         this.holderFactory = holderFactory;
         this.onClickEvent = onClickEvent;
     }
@@ -41,7 +41,7 @@ public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
     }
 
     @Override
-    public void onBindViewHolder(BaseViewHolder<BaseHM> holder, final int position) {
+    public void onBindViewHolder(BaseViewHolder<BaseHM> holder, int position) {
         if(holder!=null){
             final BaseHM baseHM = baseHMs.get(position);
             holder.bind(baseHM);
@@ -49,7 +49,7 @@ public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onClickEvent.onItemClick(position, baseHM);
+                        onClickEvent.onItemClick(baseHM);
                     }
                 });
             }
@@ -74,6 +74,6 @@ public void addItem(BaseHM item){
     }
 
     public interface OnClickEvent {
-        void onItemClick(int pos, BaseHM baseHM);
+        void onItemClick(BaseHM baseHM);
     }
 }

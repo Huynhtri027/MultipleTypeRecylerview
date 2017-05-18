@@ -31,10 +31,10 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.RedHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.AddHolder;
 
 public class MainActivity extends AppCompatActivity  {
+    private static final String TAG = MainActivity.class.getSimpleName();
     RecyclerView rv;
     Toolbar toolbar;
     View wrapper;
-    private ItemTouchHelper mItemTouchHelper;
     CustomGodAdapter customGodAdapter;
     Mapper mp = new Mapper();
     @Override
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity  {
 //        setupActionBar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
+        toolbar.setTitle("Touching a item for a while to drag item");
         animateToolbar(toolbar);
 
 //        setup RV
@@ -62,16 +63,15 @@ public class MainActivity extends AppCompatActivity  {
         customGodAdapter = new CustomGodAdapter(new HolderFactoryImpl(),
                 new GodAdapter.OnClickEvent() {
                     @Override
-                    public void onItemClick(int pos, BaseHM baseHM) {
+                    public void onItemClick( BaseHM baseHM) {
                         if (baseHM instanceof AddHM) {
                             ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
-                            rv.getLayoutManager().scrollToPosition(pos);
                         }
                     }
                 });
 
-//       using to drag and swipe item
-        mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+//      drag and swipe item
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
 
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
@@ -79,11 +79,11 @@ public class MainActivity extends AppCompatActivity  {
                     final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
                     final int swipeFlags = 0;
                     return makeMovementFlags(dragFlags, swipeFlags);
-                }else if(recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+                } else if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
                     final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
                     final int swipeFlags = 0;
                     return makeMovementFlags(dragFlags, swipeFlags);
-                }else {
+                } else {
                     final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
                     final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
                     return makeMovementFlags(dragFlags, swipeFlags);
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                if(viewHolder instanceof AddHolder){
+                if (viewHolder instanceof AddHolder) {
                     return false;
                 }
                 customGodAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
@@ -128,16 +128,38 @@ public class MainActivity extends AppCompatActivity  {
         });
         mItemTouchHelper.attachToRecyclerView(rv);
         rv.setAdapter(customGodAdapter);
+
+//       restore state
+        if(getLastCustomNonConfigurationInstance()!=null){
+            baseHMs = (List<BaseHM>) getLastCustomNonConfigurationInstance();
+            Log.d(TAG, "onCreate: "+baseHMs.toString());
+        }
     }
 
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return baseHMs;
+    }
+
+    @Override
+    public Object getLastCustomNonConfigurationInstance() {
+        return super.getLastCustomNonConfigurationInstance();
+    }
+
+    List<BaseHM> baseHMs = new ArrayList<>();
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 //        call services here
-        List<BaseHM> baseHMs = mp.mapping(Service.getList());
-        final List<BaseHM> copyList = new ArrayList<>(baseHMs);
-        baseHMs.add(new HorizontalListHM(copyList));
-        baseHMs.add(new HorizontalListHM(copyList));
+
+        if(baseHMs.size()==0){
+            Log.d(TAG, "onPostCreate: ");
+            baseHMs.addAll(mp.mapping(Service.getList()));
+            final List<BaseHM> copyList = new ArrayList<>(baseHMs);
+            baseHMs.add(new HorizontalListHM(copyList));
+            baseHMs.add(new HorizontalListHM(copyList));
+            customGodAdapter.addList(baseHMs);
+        }
         customGodAdapter.addList(baseHMs);
     }
 
@@ -145,6 +167,7 @@ public class MainActivity extends AppCompatActivity  {
         View t = toolbar.getChildAt(0);
         if (t != null && t instanceof TextView) {
             TextView title = (TextView) t;
+            title.setTextSize(16f);
             // fade in and space out the title.  Animating the letterSpacing performs horribly so
             // fake it by setting the desired letterSpacing then animating the scaleX ¯\_(ツ)_/¯
             title.setAlpha(0f);
@@ -158,7 +181,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    class Mapper{
+    private class Mapper{
         List<BaseHM> mapping(List<SimpleItem> simpleItemlist){
             List<BaseHM> baseHMs = new ArrayList<>();
             for (int i = 0; i < simpleItemlist.size(); i++) {
@@ -168,7 +191,6 @@ public class MainActivity extends AppCompatActivity  {
         }
         BaseHM mapping(SimpleItem simpleItem){
             BaseHM baseHM=null;
-//
             switch (simpleItem.getPos()%3){
                 case 0:
                     baseHM = new BlueHM(simpleItem.getPos());
