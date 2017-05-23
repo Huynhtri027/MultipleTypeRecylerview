@@ -4,16 +4,16 @@ import android.view.View;
 
 import ngohoanglong.com.lifequests.R;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
-import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BlueHM;
-import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GreenHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.IconHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GridHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
-import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.RedHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.InfoHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.AddHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BaseViewHolder;
-import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BlueHolder;
-import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.GreenHolder;
+import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.IconHolder;
+import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.GridHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.HorizontalListHolder;
-import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.RedHolder;
+import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.InfoHolder;
 
 
 /**
@@ -24,7 +24,7 @@ public class HolderFactoryImpl implements HolderFactory {
 
     private static final int ITEM_BLUE = R.layout.layout_blue_item;
     private static final int ITEM_RED = R.layout.layout_red_item;
-    private static final int ITEM_GREEN = R.layout.layout_green_item;
+    private static final int ITEM_GREEN = R.layout.layout_grid_item;
     private static final int ITEM_ADD = R.layout.layout_add_item;
     private static final int ITEM_HL = R.layout.layout_hl_item;
 
@@ -36,11 +36,11 @@ public class HolderFactoryImpl implements HolderFactory {
     public BaseViewHolder createHolder(int type, View view) {
         switch(type) {
             case ITEM_BLUE:
-                return new BlueHolder(view);
+                return new IconHolder(view);
             case ITEM_GREEN:
-                return new GreenHolder(view);
+                return new GridHolder(view);
             case ITEM_RED:
-                return new RedHolder(view);
+                return new InfoHolder(view);
             case ITEM_ADD:
                 return new AddHolder(view);
             case ITEM_HL:
@@ -50,17 +50,17 @@ public class HolderFactoryImpl implements HolderFactory {
     }
 
     @Override
-    public int getHolderType(BlueHM blueHM) {
+    public int getHolderType(IconHM iconHM) {
         return ITEM_BLUE;
     }
 
     @Override
-    public int getHolderType(GreenHM greenHM) {
+    public int getHolderType(GridHM gridHM) {
         return ITEM_GREEN;
     }
 
     @Override
-    public int getHolderType(RedHM redHM) {
+    public int getHolderType(InfoHM redHM) {
         return ITEM_RED;
     }
 

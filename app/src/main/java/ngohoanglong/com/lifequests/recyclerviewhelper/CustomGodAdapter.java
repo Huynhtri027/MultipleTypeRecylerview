@@ -20,9 +20,8 @@ public class CustomGodAdapter extends GodAdapter  {
     public CustomGodAdapter(List<BaseHM> baseHMs, HolderFactory holderFactory, GodAdapter.OnClickEvent onClickEvent) {
         super(baseHMs,holderFactory,onClickEvent);
     }
-    public CustomGodAdapter(HolderFactory holderFactory, GodAdapter.OnClickEvent onClickEvent) {
-        super(holderFactory,onClickEvent);
-    }
+
+
     private AddHM addHM = new AddHM();
     @Override
     public int getItemCount() {
@@ -41,7 +40,7 @@ public class CustomGodAdapter extends GodAdapter  {
     @Override
     public void onBindViewHolder(final BaseViewHolder<BaseHM> holder,  int position) {
 
-        if(position==getAddPosition()){
+        if(position==getAddPosition()&&onClickEvent!=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -52,6 +51,14 @@ public class CustomGodAdapter extends GodAdapter  {
 
             super.onBindViewHolder(holder, position);
         }
+    }
+    public int getDataListSize(){
+        return baseHMs.size();
+    }
+    @Override
+    public void addItem(BaseHM item) {
+        baseHMs.add(item);
+        notifyItemInserted(getDataListSize()-1);
     }
 
     @Override

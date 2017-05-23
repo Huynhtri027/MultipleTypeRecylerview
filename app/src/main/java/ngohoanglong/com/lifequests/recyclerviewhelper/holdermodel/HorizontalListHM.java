@@ -10,7 +10,7 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderTypeFa
  */
 
 public class HorizontalListHM extends BaseHM {
-    List<BaseHM> baseHMs = new ArrayList<>();
+    public List<BaseHM> baseHMs = new ArrayList<>();
 
 //   de giu trang thai cua recyclerView
     int currentPosition = 0;

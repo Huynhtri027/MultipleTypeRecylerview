@@ -18,16 +18,16 @@ import android.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import ngohoanglong.com.lifequests.immutablemodel.SimpleItem;
+import ngohoanglong.com.lifequests.model.SimpleItem;
 import ngohoanglong.com.lifequests.recyclerviewhelper.CustomGodAdapter;
 import ngohoanglong.com.lifequests.recyclerviewhelper.GodAdapter;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactoryImpl;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BaseHM;
-import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BlueHM;
-import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GreenHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GridHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
-import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.RedHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.IconHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.InfoHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.AddHolder;
 
 public class MainActivity extends AppCompatActivity  {
@@ -35,13 +35,15 @@ public class MainActivity extends AppCompatActivity  {
     RecyclerView rv;
     Toolbar toolbar;
     View wrapper;
-    List<BaseHM> baseHMs = new ArrayList<>();
     CustomGodAdapter customGodAdapter;
     Mapper mp = new Mapper();
+    boolean needCreate = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 //        setup wrapView
         wrapper = findViewById(R.id.wrapper);
@@ -61,15 +63,6 @@ public class MainActivity extends AppCompatActivity  {
                         LinearLayoutManager.VERTICAL);
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         rv.setLayoutManager(staggeredGridLayoutManagerVertical);
-        customGodAdapter = new CustomGodAdapter(baseHMs,new HolderFactoryImpl(),
-                new GodAdapter.OnClickEvent() {
-                    @Override
-                    public void onItemClick( BaseHM baseHM) {
-                        if (baseHM instanceof AddHM) {
-                            ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
-                        }
-                    }
-                });
 
 //      drag and swipe item
         ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
@@ -130,16 +123,12 @@ public class MainActivity extends AppCompatActivity  {
         mItemTouchHelper.attachToRecyclerView(rv);
         rv.setAdapter(customGodAdapter);
 
-//       restore state
-        if(getLastCustomNonConfigurationInstance()!=null){
-            baseHMs = (List<BaseHM>) getLastCustomNonConfigurationInstance();
-            Log.d(TAG, "onCreate: "+baseHMs.toString());
-        }
+
     }
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        return baseHMs;
+        return new State(customGodAdapter.getList(),needCreate);
     }
 
     @Override
@@ -148,21 +137,99 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    private BaseHM createGridHM(){
+        List<BaseHM> icons= new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            icons.add(new IconHM(i));
+        }
+        return new GridHM(icons);
+
+    }
+    private BaseHM createHorizontalHM(){
+        final List<BaseHM> baseHMs = new ArrayList<>(mp.mapping(Service.getList()));
+        return new HorizontalListHM(baseHMs);
+
+    }
+    private List<BaseHM> createInfoList() {
+        List<BaseHM> icons= new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            icons.add(new InfoHM(i));
+        }
+        return icons;
+    }
+    void onRestoreState(){
+        //       restore state
+        List<BaseHM> baseHMs = new ArrayList<>();
+        if(getLastCustomNonConfigurationInstance()!=null){
+            State state = (State) getLastCustomNonConfigurationInstance();
+            baseHMs.addAll(state.baseHMs);
+            needCreate = state.needCreate;
+
+            if(baseHMs!=null&&baseHMs.size()>0){
+                needCreate = false;
+                customGodAdapter = new CustomGodAdapter(baseHMs,new HolderFactoryImpl(),
+                        new GodAdapter.OnClickEvent() {
+                            @Override
+                            public void onItemClick( BaseHM baseHM) {
+                                if (baseHM instanceof AddHM) {
+                                    ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
+                                }
+                            }
+                        });
+
+            }else {
+                needCreate = true;
+            }
+        }else {
+            needCreate = true;
+        }
+        if(needCreate){
+            customGodAdapter = new CustomGodAdapter(new ArrayList<BaseHM>(),new HolderFactoryImpl(),
+                    new GodAdapter.OnClickEvent() {
+                        @Override
+                        public void onItemClick( BaseHM baseHM) {
+                            if (baseHM instanceof AddHM) {
+                                ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
+                            }
+                        }
+                    });
+        }else {
+            customGodAdapter = new CustomGodAdapter(baseHMs,new HolderFactoryImpl(),
+                    new GodAdapter.OnClickEvent() {
+                        @Override
+                        public void onItemClick( BaseHM baseHM) {
+                            if (baseHM instanceof AddHM) {
+                                ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
+                            }
+                        }
+                    });
+        }
+        rv.setAdapter(customGodAdapter);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        onRestoreState();
+    }
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 //        call services here
 
-        if(baseHMs.size()==0){
-            Log.d(TAG, "onPostCreate: ");
-            baseHMs.addAll(mp.mapping(Service.getList()));
-            final List<BaseHM> copyList = new ArrayList<>(baseHMs);
-            baseHMs.add(new HorizontalListHM(copyList));
-            baseHMs.add(new HorizontalListHM(copyList));
-            customGodAdapter.addList(baseHMs);
+        if(needCreate){
+            Log.d(TAG, "createList ");
+            List<BaseHM> newBaseHMs = new ArrayList<>();
+            newBaseHMs.add(createGridHM());
+            newBaseHMs.add(createHorizontalHM());
+            newBaseHMs.addAll(createInfoList());
+//          baseHMs.addAll(mp.mapping(Service.getList()));
+            customGodAdapter.addList(newBaseHMs);
         }
-        customGodAdapter.addList(baseHMs);
+
     }
+
+
 
     private void animateToolbar(Toolbar toolbar) {
         View t = toolbar.getChildAt(0);
@@ -192,18 +259,21 @@ public class MainActivity extends AppCompatActivity  {
         }
         BaseHM mapping(SimpleItem simpleItem){
             BaseHM baseHM=null;
-            switch (simpleItem.getPos()%3){
+            switch (simpleItem.getPos()%1){
                 case 0:
-                    baseHM = new BlueHM(simpleItem.getPos());
-                    break;
-                case 1:
-                    baseHM = new GreenHM(simpleItem.getPos());
-                    break;
-                case 2:
-                    baseHM = new RedHM(simpleItem.getPos());
+                    baseHM = new IconHM(simpleItem.getPos());
                     break;
             }
             return baseHM;
+        }
+    }
+
+    static class State{
+        List<BaseHM> baseHMs;
+        boolean needCreate ;
+        public State(List<BaseHM> baseHMs, boolean needCreate) {
+            this.baseHMs = baseHMs;
+            this.needCreate = needCreate;
         }
     }
 }

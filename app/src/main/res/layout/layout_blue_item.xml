@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="200dp"
-    >
-    <TextView
-        android:id="@+id/tvPos"
-        android:text="pos"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    tool:showIn="@layout/layout_grid_item">
+    <ImageView
+        android:layout_margin="4dp"
+        android:id="@+id/ivIcon"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#4144d1"
-        android:textColor="#fff"
-        android:textAlignment="center"
-        android:layout_margin="10dp"/>
-</LinearLayout>
+        android:layout_height="100dp"
+        android:minHeight="100dp"
+        tool:src="@drawable/daredevil"
+        />
+</android.support.v7.widget.CardView>

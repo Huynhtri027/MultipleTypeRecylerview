@@ -1,16 +1,19 @@
 package ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel;
 
+import java.util.List;
+
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderTypeFactory;
 
 /**
  * Created by Long on 5/10/2017.
  */
 
-public class RedHM extends BaseHM {
+public class GridHM extends BaseHM {
 
-    public int pos;
-    public RedHM(int pos) {
-        this.pos = pos;
+    public final List<BaseHM> baseHMs;
+
+    public GridHM(List<BaseHM> baseHMs) {
+        this.baseHMs = baseHMs;
     }
 
     @Override
@@ -20,13 +23,10 @@ public class RedHM extends BaseHM {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("RedHM{ ");
-        sb.append("pos=").append(pos);
+        final StringBuilder sb = new StringBuilder("GridHM{ ");
+        sb.append("baseHMs=").append(baseHMs.toString())
+                .append('\n');
         sb.append("}\n");
         return sb.toString();
     }
-
-    public RedHM() {
-    }
-
 }

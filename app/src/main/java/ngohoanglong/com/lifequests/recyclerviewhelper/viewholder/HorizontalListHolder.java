@@ -9,6 +9,7 @@ import android.view.View;
 
 import ngohoanglong.com.lifequests.recyclerviewhelper.GodAdapter;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactoryImpl;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BaseHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
 
 import static ngohoanglong.com.lifequests.R.id.rv;
@@ -42,7 +43,12 @@ public class HorizontalListHolder extends BaseViewHolder<HorizontalListHM> {
         recyclerView.scrollToPosition(item.getCurrentPosition());
 
         recyclerView.getLayoutManager().onSaveInstanceState();
-        recyclerView.setAdapter(new GodAdapter(item.getBaseHMs(),new HolderFactoryImpl(),null));
+        recyclerView.setAdapter(new GodAdapter(item.getBaseHMs(), new HolderFactoryImpl(), new GodAdapter.OnClickEvent() {
+            @Override
+            public void onItemClick(BaseHM baseHM) {
+
+            }
+        }));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

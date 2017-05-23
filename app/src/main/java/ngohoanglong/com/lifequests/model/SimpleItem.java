@@ -1,4 +1,4 @@
-package ngohoanglong.com.lifequests.immutablemodel;
+package ngohoanglong.com.lifequests.model;
 
 /**
  * Created by Long on 5/10/2017.

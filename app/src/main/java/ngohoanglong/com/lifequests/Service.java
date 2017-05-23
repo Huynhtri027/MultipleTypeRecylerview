@@ -3,7 +3,7 @@ package ngohoanglong.com.lifequests;
 import java.util.ArrayList;
 import java.util.List;
 
-import ngohoanglong.com.lifequests.immutablemodel.SimpleItem;
+import ngohoanglong.com.lifequests.model.SimpleItem;
 
 /**
  * Created by Long on 5/10/2017.

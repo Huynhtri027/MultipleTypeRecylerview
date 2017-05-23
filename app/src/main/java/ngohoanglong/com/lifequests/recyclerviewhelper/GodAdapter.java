@@ -17,16 +17,16 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BaseViewHolder;
 
 public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
 
-    List<BaseHM> baseHMs ;
+    final List<BaseHM> baseHMs ;
     HolderFactory holderFactory ;
     OnClickEvent onClickEvent;
 
+    public List<BaseHM> getList() {
+        return baseHMs;
+    }
+
     public GodAdapter(List<BaseHM> baseHMs, HolderFactory holderFactory, OnClickEvent onClickEvent) {
         this.baseHMs = baseHMs;
-        this.holderFactory = holderFactory;
-        this.onClickEvent = onClickEvent;
-    }
-    GodAdapter(HolderFactory holderFactory, OnClickEvent onClickEvent) {
         this.holderFactory = holderFactory;
         this.onClickEvent = onClickEvent;
     }
@@ -56,7 +56,7 @@ public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
     }
 public void addItem(BaseHM item){
     baseHMs.add(item);
-    notifyDataSetChanged();
+    notifyItemInserted(getItemCount()-1);
 }
     public void addList(List<BaseHM> items){
         baseHMs.addAll(items);
