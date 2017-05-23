@@ -43,11 +43,12 @@ public class HorizontalListHolder extends BaseViewHolder<HorizontalListHM> {
         recyclerView.scrollToPosition(item.getCurrentPosition());
 
         recyclerView.getLayoutManager().onSaveInstanceState();
-        recyclerView.setAdapter(new GodAdapter(item.getBaseHMs(), new HolderFactoryImpl(), new GodAdapter.OnClickEvent() {
+        recyclerView.setAdapter(new GodAdapter(item.getBaseHMs(), new HolderFactoryImpl(), new GodAdapter.AdapterListener() {
             @Override
-            public void onItemClick(BaseHM baseHM) {
+            public void onItemClick(BaseHM baseHM, int pos, int actionType) {
 
             }
+
         }));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

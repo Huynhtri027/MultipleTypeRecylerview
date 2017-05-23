@@ -19,16 +19,16 @@ public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
 
     final List<BaseHM> baseHMs ;
     HolderFactory holderFactory ;
-    OnClickEvent onClickEvent;
+    AdapterListener adapterListener;
 
     public List<BaseHM> getList() {
         return baseHMs;
     }
 
-    public GodAdapter(List<BaseHM> baseHMs, HolderFactory holderFactory, OnClickEvent onClickEvent) {
+    public GodAdapter(List<BaseHM> baseHMs, HolderFactory holderFactory, AdapterListener adapterListener) {
         this.baseHMs = baseHMs;
         this.holderFactory = holderFactory;
-        this.onClickEvent = onClickEvent;
+        this.adapterListener = adapterListener;
     }
     @Override
     public BaseViewHolder<BaseHM> onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -42,13 +42,14 @@ public class GodAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
     @Override
     public void onBindViewHolder(BaseViewHolder<BaseHM> holder, int position) {
         if(holder!=null){
+            final int pos = position;
             final BaseHM baseHM = baseHMs.get(position);
             holder.bind(baseHM);
-            if(onClickEvent!=null){
+            if(adapterListener !=null){
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onClickEvent.onItemClick(baseHM);
+                        adapterListener.onItemClick(baseHM,pos,AdapterListener.ACTION_CLICK);
                     }
                 });
             }
@@ -72,7 +73,9 @@ public void addItem(BaseHM item){
         return baseHMs.get(position).getHolderType(holderFactory);
     }
 
-    public interface OnClickEvent {
-        void onItemClick(BaseHM baseHM);
+    public interface AdapterListener {
+        public static final int ACTION_ADD = 0;
+        public static final int ACTION_CLICK = 1;
+        void onItemClick(BaseHM baseHM,int pos,int actionType);
     }
 }

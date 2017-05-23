@@ -7,5 +7,22 @@ import java.io.Serializable;
  */
 
 public abstract class BaseHM implements Serializable, Visitable {
+    protected  boolean selectable = true;
+    protected  boolean isSelected = false;
 
+    public boolean isSelectable() {
+        return selectable;
+    }
+
+    public void setSelectable(boolean selectable) {
+        this.selectable = selectable;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }

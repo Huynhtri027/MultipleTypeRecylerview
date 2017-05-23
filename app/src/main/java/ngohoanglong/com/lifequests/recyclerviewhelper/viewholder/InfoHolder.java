@@ -15,7 +15,7 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.InfoHM;
 public class InfoHolder extends BaseViewHolder<InfoHM> {
 
     public InfoHolder(View itemView) {
-        super(itemView); textView = (TextView) itemView.findViewById(R.id.tvPos);
+        super(itemView);
         ivIcon = (ImageView) itemView.findViewById(R.id.ivIcon);
         textView = (TextView) itemView.findViewById(R.id.tvTitle);
         ratingBar = (RatingBar) itemView.findViewById(R.id.rating);

@@ -35,16 +35,18 @@ public class GridHolder extends BaseViewHolder<GridHM> {
     @Override
     public void bind(final GridHM item) {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(itemView.getContext(), 3, LinearLayoutManager.VERTICAL, false);
-        CustomGodAdapter customGodAdapter = new CustomGodAdapter(item.baseHMs, new HolderFactoryImpl(), new GodAdapter.OnClickEvent() {
+        CustomGodAdapter customGodAdapter = new CustomGodAdapter(item.baseHMs, new HolderFactoryImpl(), new GodAdapter.AdapterListener() {
             @Override
-            public void onItemClick(BaseHM baseHM) {
+            public void onItemClick(BaseHM baseHM,int pos,int actionType) {
                 if (baseHM instanceof AddHM) {
                     ((GodAdapter) rvIcons.getAdapter()).addItem(new IconHM(item.baseHMs.size()));
+                    rvIcons.smoothScrollToPosition(pos);
                 }
             }
         });
         rvIcons.setLayoutManager(gridLayoutManager);
         rvIcons.setAdapter(customGodAdapter);
+        rvIcons.addItemDecoration(customGodAdapter.myItemDecoration);
     }
 
 

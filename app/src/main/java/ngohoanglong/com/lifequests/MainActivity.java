@@ -22,7 +22,6 @@ import ngohoanglong.com.lifequests.model.SimpleItem;
 import ngohoanglong.com.lifequests.recyclerviewhelper.CustomGodAdapter;
 import ngohoanglong.com.lifequests.recyclerviewhelper.GodAdapter;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactoryImpl;
-import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BaseHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GridHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
@@ -92,17 +91,6 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-//                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE||actionState == ItemTouchHelper.ACTION_STATE_DRAG){
-//                    viewHolder.itemView.setAlpha(0.7f);
-//                }
-            }
-
-            @Override
-            public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                Log.d("clearView", "clearView: ");
-                viewHolder.itemView.setAlpha(1);
-                super.clearView(recyclerView, viewHolder);
-
 
             }
 
@@ -164,46 +152,24 @@ public class MainActivity extends AppCompatActivity  {
             State state = (State) getLastCustomNonConfigurationInstance();
             baseHMs.addAll(state.baseHMs);
             needCreate = state.needCreate;
-
-            if(baseHMs!=null&&baseHMs.size()>0){
-                needCreate = false;
-                customGodAdapter = new CustomGodAdapter(baseHMs,new HolderFactoryImpl(),
-                        new GodAdapter.OnClickEvent() {
-                            @Override
-                            public void onItemClick( BaseHM baseHM) {
-                                if (baseHM instanceof AddHM) {
-                                    ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
-                                }
-                            }
-                        });
-
-            }else {
-                needCreate = true;
-            }
+            needCreate = baseHMs.size() <= 0;
         }else {
             needCreate = true;
         }
-        if(needCreate){
-            customGodAdapter = new CustomGodAdapter(new ArrayList<BaseHM>(),new HolderFactoryImpl(),
-                    new GodAdapter.OnClickEvent() {
+
+        customGodAdapter = new CustomGodAdapter(baseHMs,new HolderFactoryImpl(),
+                    new GodAdapter.AdapterListener() {
                         @Override
-                        public void onItemClick( BaseHM baseHM) {
-                            if (baseHM instanceof AddHM) {
+                        public void onItemClick( BaseHM baseHM,int pos,int actionType) {
+                            if (actionType == ACTION_CLICK) {
                                 ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
+                            }
+                            if (actionType == ACTION_ADD) {
+                                rv.smoothScrollToPosition(pos);
                             }
                         }
                     });
-        }else {
-            customGodAdapter = new CustomGodAdapter(baseHMs,new HolderFactoryImpl(),
-                    new GodAdapter.OnClickEvent() {
-                        @Override
-                        public void onItemClick( BaseHM baseHM) {
-                            if (baseHM instanceof AddHM) {
-                                ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
-                            }
-                        }
-                    });
-        }
+
         rv.setAdapter(customGodAdapter);
     }
     @Override
@@ -223,7 +189,6 @@ public class MainActivity extends AppCompatActivity  {
             newBaseHMs.add(createGridHM());
             newBaseHMs.add(createHorizontalHM());
             newBaseHMs.addAll(createInfoList());
-//          baseHMs.addAll(mp.mapping(Service.getList()));
             customGodAdapter.addList(newBaseHMs);
         }
 
@@ -236,8 +201,7 @@ public class MainActivity extends AppCompatActivity  {
         if (t != null && t instanceof TextView) {
             TextView title = (TextView) t;
             title.setTextSize(16f);
-            // fade in and space out the title.  Animating the letterSpacing performs horribly so
-            // fake it by setting the desired letterSpacing then animating the scaleX ¯\_(ツ)_/¯
+
             title.setAlpha(0f);
             title.setScaleX(0.6f);
             title.animate()
