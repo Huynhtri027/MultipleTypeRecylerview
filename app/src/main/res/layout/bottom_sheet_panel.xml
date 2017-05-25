@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+
+    android:id="@+id/bsPanel"
+    android:background="#e2cfcfcf"
+    android:elevation="2dp"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    android:clickable="true">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PANEL"
+        android:textColor="#000000"
+        android:padding="16dp"/>
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvDisplayItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="20dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

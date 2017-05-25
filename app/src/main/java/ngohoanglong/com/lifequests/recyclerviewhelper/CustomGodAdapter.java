@@ -10,6 +10,7 @@ import android.view.View;
 
 import java.util.List;
 
+import ngohoanglong.com.lifequests.R;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactory;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BaseHM;
@@ -21,58 +22,84 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BaseViewHolder;
 
 public class CustomGodAdapter extends GodAdapter  {
     private static final String TAG = CustomGodAdapter.class.getSimpleName();
+    boolean enableAddbutton = true;
 
-    public CustomGodAdapter(List<BaseHM> baseHMs, HolderFactory holderFactory, AdapterListener adapterListener) {
-        super(baseHMs,holderFactory, adapterListener);
-        selectedManager = new SelectedManager(baseHMs, SelectedManager.SELECTED_MODE_SINGLE,
+    public boolean isEnableAddbutton() {
+        return enableAddbutton;
+    }
+
+    public void setEnableAddbutton(boolean enableAddbutton) {
+        this.enableAddbutton = enableAddbutton;
+    }
+
+    public CustomGodAdapter(List<BaseHM> baseHMs, HolderFactory holderFactory, AdapterListener adapterListener, int selectMode) {
+        this(baseHMs,holderFactory, adapterListener);
+        selectedManager = new SelectedManager(baseHMs, selectMode,
                 new SelectedManager.OnSelectItemListener() {
                     @Override
                     public void afterSelected(Object pos) {
                         notifyDataSetChanged();
                     }
                 });
+        addHM = new AddHM();
     }
-
+    public CustomGodAdapter(List<BaseHM> baseHMs, HolderFactory holderFactory, AdapterListener adapterListener) {
+        super(baseHMs,holderFactory, adapterListener);
+        addHM = new AddHM();
+    }
 
     private AddHM addHM = new AddHM();
+    int addType = R.layout.layout_add_item;
+
     @Override
     public int getItemCount() {
-        if(addHM!=null){
+        if(enableAddbutton){
             return getListSize()+1;
         }
-        return baseHMs.size();
+        Log.d(TAG, "getItemCount: "+getListSize());
+        return getListSize();
     }
+
+
     private int getListSize(){
         return baseHMs.size();
     }
     private int getAddPosition(){
-        return baseHMs.size();
+        if(enableAddbutton&&addHM!=null){
+            return baseHMs.size();
+        }else {
+            return -99;
+        }
     }
 
     @Override
     public void onBindViewHolder(final BaseViewHolder<BaseHM> holder, int position) {
         final int pos = position;
-        if(pos==getAddPosition()&& adapterListener !=null){
+        if(enableAddbutton && pos==getAddPosition()){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adapterListener.onItemClick(addHM,pos,AdapterListener.ACTION_CLICK);
+                    if(adapterListener !=null){
+                        adapterListener.onItemClick(addHM,pos,AdapterListener.ACTION_ADD);
+                    }
                 }
             });
         }else{
             if(holder!=null){
                 final BaseHM baseHM = baseHMs.get(pos);
                 holder.bind(baseHM);
-                if(adapterListener !=null){
+                if(adapterListener !=null)
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            selectedManager.onSelectedChange(baseHM);
+                            if(selectedManager!=null){
+                                selectedManager.onSelectedChange(baseHM);
+                            }
                         }
                     });
-                }
             }
         }
+
     }
     public int getDataListSize(){
         return baseHMs.size();
@@ -81,16 +108,19 @@ public class CustomGodAdapter extends GodAdapter  {
     public void addItem(BaseHM item) {
         baseHMs.add(item);
         notifyItemInserted(getDataListSize()-1);
-        adapterListener.onItemClick(item,getAddPosition(),AdapterListener.ACTION_ADD);
+        adapterListener.onItemClick(item,getAddPosition(),AdapterListener.ACTION_AFTER_ADD);
     }
 
+    public void setItem(int pos,BaseHM item) {
+        baseHMs.set(pos,item);
+        notifyItemChanged(pos);
+    }
     @Override
     public int getItemViewType(int position) {
-        if(position!=getAddPosition()){
-            return baseHMs.get(position).getHolderType(holderFactory);
+        if(enableAddbutton&&position==getAddPosition()){
+            return addHM.getHolderType(holderFactory);
         }
-        return addHM.getHolderType(holderFactory);
-
+        return baseHMs.get(position).getHolderType(holderFactory);
     }
 
     public void onItemDismiss(int position) {
@@ -116,9 +146,10 @@ public class CustomGodAdapter extends GodAdapter  {
         super.onViewRecycled(holder);
     }
 
-    static class SelectedManager{
-        final static int SELECTED_MODE_SINGLE = 0;
-        final static int SELECTED_MODE_MUTI = 1;
+    public static class SelectedManager{
+        public final static int SELECTED_MODE_NONE = -1;
+        public final static int SELECTED_MODE_SINGLE = 0;
+        public final static int SELECTED_MODE_MUTI = 1;
         private int selectedMode = SELECTED_MODE_SINGLE;
         OnSelectItemListener  onSelectItemListener;
         List<BaseHM> hms ;
@@ -130,6 +161,8 @@ public class CustomGodAdapter extends GodAdapter  {
         }
 
         void onSelectedChange(BaseHM item){
+            if(selectedMode==-1)return;
+            if (!item.isSelectable())return;
             if(selectedMode==SELECTED_MODE_SINGLE){
                 for (BaseHM baseHM:hms
                      ) {
@@ -141,7 +174,6 @@ public class CustomGodAdapter extends GodAdapter  {
             if(selectedMode==SELECTED_MODE_MUTI){
                 item.setSelected(!item.isSelected());
             }
-            Log.d(TAG, "onSelectedChange: "+ item.isSelected());
             onSelectItemListener.afterSelected(item);
         }
 

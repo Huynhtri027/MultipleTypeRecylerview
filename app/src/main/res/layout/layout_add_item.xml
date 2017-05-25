@@ -3,13 +3,13 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="110dp"
     android:layout_gravity="center"
    >
     <ImageView
         android:id="@+id/tvPos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@drawable/ic_plus_one_black_24dp"
         />
 </LinearLayout>

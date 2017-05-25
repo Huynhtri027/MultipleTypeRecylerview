@@ -1,10 +1,14 @@
 package ngohoanglong.com.lifequests.recyclerviewhelper;
 
+import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactory;
@@ -74,8 +78,14 @@ public void addItem(BaseHM item){
     }
 
     public interface AdapterListener {
-        public static final int ACTION_ADD = 0;
-        public static final int ACTION_CLICK = 1;
-        void onItemClick(BaseHM baseHM,int pos,int actionType);
+        @IntDef({ACTION_ADD,ACTION_AFTER_ADD,ACTION_CLICK,ACTION_UPDATE})
+        @Retention(RetentionPolicy.SOURCE)
+        public @interface ActionType {}
+         int ACTION_ADD = 0;
+         int ACTION_AFTER_ADD = 1;
+         int ACTION_CLICK = 2;
+         int ACTION_UPDATE = 3;
+
+        void onItemClick(@Nullable BaseHM baseHM, @Nullable int pos, @ActionType int actionType);
     }
 }

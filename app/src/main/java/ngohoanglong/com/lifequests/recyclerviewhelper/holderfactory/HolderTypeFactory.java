@@ -6,6 +6,7 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GridHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.IconHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.InfoHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.SimpleTextHM;
 
 /**
  * Created by Long on 11/10/2016.
@@ -20,4 +21,6 @@ public interface HolderTypeFactory {
     int getHolderType(AddHM addHM);
 
     int getHolderType(HorizontalListHM horizontalListHM);
+
+    int getHolderType(SimpleTextHM simpleTextHM);
 }

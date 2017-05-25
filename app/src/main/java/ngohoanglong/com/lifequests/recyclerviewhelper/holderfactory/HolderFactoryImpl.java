@@ -4,16 +4,18 @@ import android.view.View;
 
 import ngohoanglong.com.lifequests.R;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.AddHM;
-import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.IconHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GridHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.IconHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.InfoHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.SimpleTextHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.AddHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.BaseViewHolder;
-import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.IconHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.GridHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.HorizontalListHolder;
+import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.IconHolder;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.InfoHolder;
+import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.SimpleTextHolder;
 
 
 /**
@@ -27,10 +29,8 @@ public class HolderFactoryImpl implements HolderFactory {
     private static final int ITEM_GREEN = R.layout.layout_grid_item;
     private static final int ITEM_ADD = R.layout.layout_add_item;
     private static final int ITEM_HL = R.layout.layout_hl_item;
+    private static final int ITEM_TEXT = R.layout.layout_text;
 
-    public static int getHLType() {
-        return ITEM_HL;
-    }
 
     @Override
     public BaseViewHolder createHolder(int type, View view) {
@@ -45,6 +45,8 @@ public class HolderFactoryImpl implements HolderFactory {
                 return new AddHolder(view);
             case ITEM_HL:
                 return new HorizontalListHolder(view);
+            case ITEM_TEXT:
+                return new SimpleTextHolder(view);
         }
         return null;
     }
@@ -72,6 +74,11 @@ public class HolderFactoryImpl implements HolderFactory {
     @Override
     public int getHolderType(HorizontalListHM horizontalListHM) {
         return ITEM_HL;
+    }
+
+    @Override
+    public int getHolderType(SimpleTextHM simpleTextHM) {
+        return ITEM_TEXT;
     }
 
 }

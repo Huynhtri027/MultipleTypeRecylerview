@@ -2,7 +2,9 @@ package ngohoanglong.com.lifequests;
 
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,11 +14,14 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ngohoanglong.com.lifequests.model.SimpleItem;
 import ngohoanglong.com.lifequests.recyclerviewhelper.CustomGodAdapter;
@@ -27,6 +32,7 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.GridHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.HorizontalListHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.IconHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.InfoHM;
+import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.SimpleTextHM;
 import ngohoanglong.com.lifequests.recyclerviewhelper.viewholder.AddHolder;
 
 public class MainActivity extends AppCompatActivity  {
@@ -112,6 +118,9 @@ public class MainActivity extends AppCompatActivity  {
         rv.setAdapter(customGodAdapter);
 
 
+
+        setupBootomPanel();
+
     }
 
     @Override
@@ -124,6 +133,82 @@ public class MainActivity extends AppCompatActivity  {
         return super.getLastCustomNonConfigurationInstance();
     }
 
+
+    //      setup bottom panel
+
+    LinearLayout bottomSheetViewgroup;
+    BottomSheetBehavior bottomSheetBehavior;
+    List<BaseHM> baseHMs;
+    CustomGodAdapter adapter;
+    int displayPosition ;
+    Button button;
+
+    void setupBootomPanel(){
+        bottomSheetViewgroup
+                = (LinearLayout) findViewById(R.id.bsPanel);
+        button = (Button) findViewById(R.id.btnAdd) ;
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BaseHM baseHM = baseHMs.get(displayPosition);
+
+                customGodAdapter.addItem(baseHM);
+            }
+        });
+        bottomSheetBehavior =
+                BottomSheetBehavior.from(bottomSheetViewgroup);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setPeekHeight(100);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            boolean lastChangeTitle = false;
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Log.d(TAG, "onSlide: "+slideOffset);
+                boolean changeTitle = bottomSheet.getTop() < 100;
+                if(changeTitle!=lastChangeTitle){
+                    if(changeTitle){
+                        toolbar.setTitle("PANEL");
+                    }else {
+                        toolbar.setTitle("Touching a item for a while to drag item");
+                    }
+                    lastChangeTitle=changeTitle;
+                }
+            }
+        });
+
+
+        baseHMs = new ArrayList<>();
+
+        List<BaseHM> holderTypes = new ArrayList<>();
+        holderTypes.add(new SimpleTextHM("Icon"));
+        holderTypes.add(new SimpleTextHM("Info"));
+        holderTypes.add(new SimpleTextHM("Grid"));
+        holderTypes.add(new SimpleTextHM("Horozontal RV"));
+        for (int i = 0; i < holderTypes.size(); i++) {
+            holderTypes.get(i).setEventAbc(new EventWrapper.EventAbc("chooseHolderType",i));
+        }
+
+        BaseHM typeChoice = new HorizontalListHM(holderTypes);
+
+        baseHMs.add(typeChoice);
+        baseHMs.add(new IconHM(0));
+        displayPosition = baseHMs.size()-1;
+
+        final StaggeredGridLayoutManager staggeredGridLayoutManagerVertical =
+                new StaggeredGridLayoutManager(
+                        2, //The number of Columns in the grid
+                        LinearLayoutManager.VERTICAL);
+        staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        adapter = new CustomGodAdapter(baseHMs, new HolderFactoryImpl(),null);
+        adapter.setEnableAddbutton(false);
+        RecyclerView rvDisplayItem = (RecyclerView) bottomSheetViewgroup.findViewById(R.id.rvDisplayItem);
+        rvDisplayItem.setLayoutManager(staggeredGridLayoutManagerVertical);
+        rvDisplayItem.setAdapter(adapter);
+    }
 
     private BaseHM createGridHM(){
         List<BaseHM> icons= new ArrayList<>();
@@ -145,6 +230,8 @@ public class MainActivity extends AppCompatActivity  {
         }
         return icons;
     }
+
+
     void onRestoreState(){
         //       restore state
         List<BaseHM> baseHMs = new ArrayList<>();
@@ -161,28 +248,66 @@ public class MainActivity extends AppCompatActivity  {
                     new GodAdapter.AdapterListener() {
                         @Override
                         public void onItemClick( BaseHM baseHM,int pos,int actionType) {
-                            if (actionType == ACTION_CLICK) {
-                                ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
-                            }
-                            if (actionType == ACTION_ADD) {
-                                rv.smoothScrollToPosition(pos);
+                            switch (actionType){
+                                case ACTION_CLICK :Log.d(TAG, "onItemClick: ACTION_CLICK");
+                                    break;
+                                case ACTION_ADD :
+                                    ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
+                                    break;
+                                case ACTION_AFTER_ADD :
+                                    rv.smoothScrollToPosition(pos);
+                                    break;
+                                case ACTION_UPDATE :
+                                    break;
                             }
                         }
                     });
 
         rv.setAdapter(customGodAdapter);
+        rv.addItemDecoration(customGodAdapter.myItemDecoration);
     }
+
+    EventWrapper.Abc abc = new EventWrapper.Abc("Global", new EventWrapper.WrapperListener() {
+        @Override
+        public void doWork(EventWrapper.EventAbc eventAbc) {
+
+            if(Objects.equals(eventAbc.event, "chooseHolderType")){
+                final int pos = (Integer) eventAbc.object;
+                Log.d(TAG, "doWork: "+eventAbc.object);
+                switch (pos){
+                    case 0:
+                        adapter.setItem(displayPosition,new IconHM(0));
+                        break;
+                    case 1:
+                        adapter.setItem(displayPosition,new InfoHM(0));
+                        break;
+                    case 2:
+                        adapter.setItem(displayPosition,createGridHM());
+                        break;
+                    case 3:
+                        adapter.setItem(displayPosition,createHorizontalHM());
+                        break;
+                }
+            }
+        }
+    });
     @Override
     protected void onStart() {
         super.onStart();
         onRestoreState();
+        EventWrapper.subscribe(abc);
+    }
+
+    @Override
+    protected void onStop() {
+        EventWrapper.unSubscribe(abc);
+        super.onStop();
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 //        call services here
-
         if(needCreate){
             Log.d(TAG, "createList ");
             List<BaseHM> newBaseHMs = new ArrayList<>();
@@ -191,7 +316,6 @@ public class MainActivity extends AppCompatActivity  {
             newBaseHMs.addAll(createInfoList());
             customGodAdapter.addList(newBaseHMs);
         }
-
     }
 
 
@@ -232,12 +356,13 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    static class State{
+    private static class State{
         List<BaseHM> baseHMs;
         boolean needCreate ;
-        public State(List<BaseHM> baseHMs, boolean needCreate) {
+        State(List<BaseHM> baseHMs, boolean needCreate) {
             this.baseHMs = baseHMs;
             this.needCreate = needCreate;
         }
     }
+
 }

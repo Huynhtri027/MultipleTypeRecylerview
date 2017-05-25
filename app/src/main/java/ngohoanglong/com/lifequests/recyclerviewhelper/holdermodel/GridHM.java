@@ -11,6 +11,8 @@ import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderTypeFa
 public class GridHM extends BaseHM {
 
     public final List<BaseHM> baseHMs;
+    public int coloum=1;
+
 
     public GridHM(List<BaseHM> baseHMs) {
         this.baseHMs = baseHMs;

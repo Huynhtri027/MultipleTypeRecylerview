@@ -7,6 +7,7 @@ import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
+import ngohoanglong.com.lifequests.EventWrapper;
 import ngohoanglong.com.lifequests.recyclerviewhelper.GodAdapter;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holderfactory.HolderFactoryImpl;
 import ngohoanglong.com.lifequests.recyclerviewhelper.holdermodel.BaseHM;
@@ -46,9 +47,10 @@ public class HorizontalListHolder extends BaseViewHolder<HorizontalListHM> {
         recyclerView.setAdapter(new GodAdapter(item.getBaseHMs(), new HolderFactoryImpl(), new GodAdapter.AdapterListener() {
             @Override
             public void onItemClick(BaseHM baseHM, int pos, int actionType) {
-
+                if(baseHM.getEventAbc()!=null){
+                    EventWrapper.pushEvent(baseHM.getEventAbc());
+                }
             }
-
         }));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
