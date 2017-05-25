@@ -117,8 +117,6 @@ public class MainActivity extends AppCompatActivity  {
         mItemTouchHelper.attachToRecyclerView(rv);
         rv.setAdapter(customGodAdapter);
 
-
-
         setupBootomPanel();
 
     }
@@ -145,14 +143,12 @@ public class MainActivity extends AppCompatActivity  {
 
     void setupBootomPanel(){
         bottomSheetViewgroup
-                = (LinearLayout) findViewById(R.id.bsPanel);
+                = (LinearLayout) findViewById(R.id.bottom_sheet_panel);
         button = (Button) findViewById(R.id.btnAdd) ;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final BaseHM baseHM = baseHMs.get(displayPosition);
-
-                customGodAdapter.addItem(baseHM);
+                addNewItem();
             }
         });
         bottomSheetBehavior =
@@ -167,8 +163,10 @@ public class MainActivity extends AppCompatActivity  {
             }
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                Log.d(TAG, "onSlide: "+slideOffset);
                 boolean changeTitle = bottomSheet.getTop() < 100;
+                int alpha = 255-(int) (Math.max(0f,Math.min((float) (bottomSheet.getTop() - 100) /100,1f))*30) ;
+                Log.d(TAG, "onSlide: "+alpha);
+                toolbar.getBackground().setAlpha(alpha);
                 if(changeTitle!=lastChangeTitle){
                     if(changeTitle){
                         toolbar.setTitle("PANEL");
@@ -208,6 +206,15 @@ public class MainActivity extends AppCompatActivity  {
         RecyclerView rvDisplayItem = (RecyclerView) bottomSheetViewgroup.findViewById(R.id.rvDisplayItem);
         rvDisplayItem.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvDisplayItem.setAdapter(adapter);
+
+        if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_EXPANDED){
+            int alpha = 255 ;
+            toolbar.getBackground().setAlpha(alpha);
+        }else if(bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_COLLAPSED){
+            int alpha = 255-30 ;
+            toolbar.getBackground().setAlpha(alpha);
+        }
+
     }
 
     private BaseHM createGridHM(){
@@ -234,17 +241,17 @@ public class MainActivity extends AppCompatActivity  {
 
     void onRestoreState(){
         //       restore state
-        List<BaseHM> baseHMs = new ArrayList<>();
+        List<BaseHM> hms = new ArrayList<>();
         if(getLastCustomNonConfigurationInstance()!=null){
             State state = (State) getLastCustomNonConfigurationInstance();
-            baseHMs.addAll(state.baseHMs);
+            hms.addAll(state.baseHMs);
             needCreate = state.needCreate;
-            needCreate = baseHMs.size() <= 0;
+            needCreate = hms.size() <= 0;
         }else {
             needCreate = true;
         }
 
-        customGodAdapter = new CustomGodAdapter(baseHMs,new HolderFactoryImpl(),
+        customGodAdapter = new CustomGodAdapter(hms,new HolderFactoryImpl(),
                     new GodAdapter.AdapterListener() {
                         @Override
                         public void onItemClick( BaseHM baseHM,int pos,int actionType) {
@@ -252,7 +259,7 @@ public class MainActivity extends AppCompatActivity  {
                                 case ACTION_CLICK :Log.d(TAG, "onItemClick: ACTION_CLICK");
                                     break;
                                 case ACTION_ADD :
-                                    ((GodAdapter) rv.getAdapter()).addItem(mp.mapping(Service.getItem()));
+                                    addNewItem();
                                     break;
                                 case ACTION_AFTER_ADD :
                                     rv.smoothScrollToPosition(pos);
@@ -265,6 +272,13 @@ public class MainActivity extends AppCompatActivity  {
 
         rv.setAdapter(customGodAdapter);
         rv.addItemDecoration(customGodAdapter.myItemDecoration);
+    }
+    public void addNewItem(View view) {
+        addNewItem();
+    }
+    private void addNewItem() {
+        final BaseHM item = baseHMs.get(displayPosition);
+        ((GodAdapter) rv.getAdapter()).addItem(item);
     }
 
     EventWrapper.Abc abc = new EventWrapper.Abc("Global", new EventWrapper.WrapperListener() {
@@ -325,7 +339,6 @@ public class MainActivity extends AppCompatActivity  {
         if (t != null && t instanceof TextView) {
             TextView title = (TextView) t;
             title.setTextSize(16f);
-
             title.setAlpha(0f);
             title.setScaleX(0.6f);
             title.animate()

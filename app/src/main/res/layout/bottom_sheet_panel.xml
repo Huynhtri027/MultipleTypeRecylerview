@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-
-    android:id="@+id/bsPanel"
     android:background="#e2cfcfcf"
     android:elevation="2dp"
     app:layout_behavior="@string/bottom_sheet_behavior"
@@ -19,6 +17,8 @@
         android:padding="16dp"/>
 
     <Button
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
