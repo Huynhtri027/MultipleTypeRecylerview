@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardUseCompatPadding="true"
+
     tool:showIn="@layout/layout_grid_item">
     <ImageView
         android:layout_margin="4dp"

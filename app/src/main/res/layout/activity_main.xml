@@ -53,6 +53,5 @@
         app:layout_anchor="@id/bottom_sheet_panel"
         app:layout_anchorGravity="end"
         android:onClick="addNewItem"
-
         />
 </android.support.design.widget.CoordinatorLayout>
